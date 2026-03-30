@@ -25,7 +25,30 @@ const displayWord=(words)=>{
     for(const word of words){
 //create element
 const newCard = document.createElement('div');
+
+newCard.innerHTML=`
+<div class="bg-white rounded space-y-3 px-5 py-15 text-center">
+    <h2 class="text-2xl font-bold">${word.word}</h2>
+    <p class="hind-siliguri-ligh font-semibold text-[15px]">Meaning/Pronunciation</p>
+    <div>
+        <p class="break-words text-2xl font-medium">
+   ${word.meaning}/${word.pronunciation}
+</p>
+        <div class="flex justify-between items-center pt-5">
+           <button class="btn bg-[#e8f3fe] hover:bg-[#00BCFF]">
+    <i class="fa-solid fa-circle-info"></i>
+</button>
+
+<button class="btn bg-[#e8f3fe] hover:bg-[#00BCFF]">
+    <i class="fa-solid fa-volume-high"></i>
+</button>
+        </div>
+    </div>
+
+   </div>`;
+   wordContainer.appendChild(newCard);
     }
+ 
 }
 // display
 const display = (lessons) => {
