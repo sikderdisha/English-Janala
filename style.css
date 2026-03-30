@@ -4,3 +4,7 @@
 .hind-siliguri-light {
   font-family: "Hind Siliguri", sans-serif;
 }
+.active{
+    background-color: #422ab5;
+    color: white;
+}
