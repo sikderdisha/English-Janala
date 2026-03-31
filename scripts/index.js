@@ -1,9 +1,17 @@
+//synonyms showing
+const createElement=(arr)=>{
+    const arrElements = arr.map(el => `<span class="elements">${el}</span>`);
+    return(arrElements.join(" "));
+}
+
 // data fetch
 function loadData(){
     fetch("https://openapi.programming-hero.com/api/levels/all")
     .then(res => res.json())
     .then(data => display(data.data)); // ⚠️ important (data.data)
 }
+
+//active remove
 const removeActive=()=>{
     const lessonBtn = document.querySelectorAll('.lesson-btn');
     //remove all active
@@ -30,6 +38,13 @@ clickBtn.classList.add('lesson-btn');
         displayWord(data.data)});
 }
 
+//load word details
+const loadWordDetails=(id)=>{
+    const url = `https://openapi.programming-hero.com/api/word/${id}`;
+    fetch(url)
+    .then(res => res.json())
+    .then(data=> displayWordDetails(data.data));
+}
 
 //display word
 const displayWord=(words)=>{
@@ -54,14 +69,14 @@ const newCard = document.createElement('div');
 
 newCard.innerHTML=`
 <div class="bg-white rounded space-y-3 px-5 py-15 text-center">
-    <h2 class="text-2xl font-bold">${word.word ? word.word:"word পাওয়া যায়নি"}</h2>
-    <p class="hind-siliguri-ligh font-semibold text-[15px]">Meaning/Pronunciation</p>
+    <h2 class="text-xl font-bold">${word.word ? word.word:"word পাওয়া যায়নি"}</h2>
+    <p class="hind-siliguri-ligh font-semibold ">Meaning/Pronunciation</p>
     <div>
-        <p class="break-words text-2xl font-medium">
+        <p class="break-words font-medium">
    ${word.meaning ? word.meaning:"Meaning পাওয়া যায়নি"}/${word.pronunciation ? word.pronunciation:"Pronunciation পাওয়া যায়নি"}
 </p>
         <div class="flex justify-between items-center pt-5">
-           <button onclick="my_modal_3.showModal()" class="btn bg-[#e8f3fe] hover:bg-[#00BCFF]">
+           <button onclick="loadWordDetails(${word.id})" class="btn bg-[#e8f3fe] hover:bg-[#00BCFF]">
     <i class="fa-solid fa-circle-info"></i>
 </button>
 
@@ -96,4 +111,38 @@ const display = (lessons) => {
     }
 };
 
+//display word details
+const displayWordDetails=(word)=>{
+    const modal = document.getElementById('modal_details');
+modal.innerHTML=`
+<div class="card w-96 bg-base-100 shadow-sm">
+  <div class="card-body">
+    <!-- heading  -->
+    <div class="space-y-3">
+      <h2 class="text-2xl font-bold">${word.word} (<i class="fa-solid fa-microphone-lines "></i> :${word.pronunciation})</h2>
+      <p class="text-[20px] font-semibold">Meaning</p>
+      <p class="text-[20px] hind-siliguri-light">${word.meaning}</p>
+    </div>
+<!-- example -->
+
+  <h3 class="font-semibold text-[20px] pt-4">Example</h3>
+  <p >${word.sentence}</p>
+
+
+<!-- buttons  -->
+  <h3 class="font-semibold text-[20px] pt-4">Synonyms</h3>
+
+   <div class="flex gap-3">
+    <button class="btn btn-outline btn-info bg-[#EDF7FF] text-black">Enthusiastic</button>
+    // <button class="btn btn-outline btn-info bg-[#EDF7FF] text-black">excited</button>
+    // <button class="btn btn-outline btn-info bg-[#EDF7FF] text-black">keen</button>
+
+   </div>
+ </div>
+  </div>
+  <button class="btn btn-info my-3 text-white">Complete Learning</button>`
+
+  document.getElementById('my_modal').showModal();
+
+}
 loadData();
