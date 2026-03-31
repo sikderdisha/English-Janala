@@ -1,7 +1,9 @@
 //synonyms showing
-const createElement=(arr)=>{
-    const arrElements = arr.map(el => `<span class="elements">${el}</span>`);
-    return(arrElements.join(" "));
+const createElement = (arr) => {
+    const arrElements = arr.map(el => 
+        `<button class="btn btn-outline btn-info bg-[#EDF7FF] text-black">${el}</button>`
+    );
+    return arrElements.join(" ");
 }
 
 // data fetch
@@ -19,23 +21,38 @@ const removeActive=()=>{
         btn.classList.remove('active');
     })
 }
+
+//loading
+const loading=(status)=>{
+if(status == true){
+    document.getElementById("loading").classList.remove('hidden');
+    document.getElementById("wordContainer").classList.add('hidden');
+}
+else{
+     document.getElementById("wordContainer").classList.remove('hidden');
+    document.getElementById("loading").classList.add('hidden');
+}
+}
+
 //load word
 //it received the id of the levels
-const loadWord=(id)=>{
-    //console.log(id);
-    const url =`https://openapi.programming-hero.com/api/level/${id}`; //dynamic url
+const loadWord = async (id) => {
+    loading(true);
 
-    fetch(url)
-    .then(res => res.json())
-    .then(data => {
-        //get the id of lesson
-        const clickBtn = document.getElementById(`btn-lesson-${id}`);
-console.log(clickBtn);
-//add active class for btn
-removeActive();
-clickBtn.classList.add('active');
-clickBtn.classList.add('lesson-btn');
-        displayWord(data.data)});
+    const url = `https://openapi.programming-hero.com/api/level/${id}`;
+    const res = await fetch(url);
+    const data = await res.json();
+
+    const clickBtn = document.getElementById(`btn-lesson-${id}`);
+    removeActive();
+    clickBtn.classList.add('active');
+    clickBtn.classList.add('lesson-btn');
+
+    displayWord(data.data);
+
+    setTimeout(() => {
+        loading(false);
+    }, 700); // 0.7 sec delay
 }
 
 //load word details
@@ -89,7 +106,7 @@ newCard.innerHTML=`
    </div>`;
    wordContainer.appendChild(newCard);
     }
- 
+//  loading(false);
 }
 // display
 const display = (lessons) => {
@@ -132,11 +149,8 @@ modal.innerHTML=`
 <!-- buttons  -->
   <h3 class="font-semibold text-[20px] pt-4">Synonyms</h3>
 
-   <div class="flex gap-3">
-    <button class="btn btn-outline btn-info bg-[#EDF7FF] text-black">Enthusiastic</button>
-    // <button class="btn btn-outline btn-info bg-[#EDF7FF] text-black">excited</button>
-    // <button class="btn btn-outline btn-info bg-[#EDF7FF] text-black">keen</button>
-
+   <div class="">
+${createElement(word.synonyms)}
    </div>
  </div>
   </div>
